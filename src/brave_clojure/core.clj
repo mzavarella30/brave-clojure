@@ -2,8 +2,15 @@
   (:gen-class))
 
 ;; Chapter 1 and 2 don't involved code
+;;;;;;;;;;;;
 
-;; Chapter 3 - Do Things: A Clojure Crash Course
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Chapter 3 - Do Things: A Clojure Crash Course ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;
+;; Syntax ;;
+;;;;;;;;;;;;
 
 (+ 1 2 3) ;; 6
 (- 1 2 3) ;; -4
@@ -80,6 +87,55 @@
 (error-msg :severe) ;; "... DOOOOMED!"
 
 
+;;;;;;;;;;;;;;;;;;;;;
+;; Data structures ;;
+;;;;;;;;;;;;;;;;;;;;;
+
+;; Numbers
+
+;; 1
+;; 1.0
+;; 1/1
+
+;; Strings
+;; "This is a string"
+;; "\"This is also a string\""
+;; 'This is NOT a string'
+
+;; The `'` is used to delimit clojure form literals
+
+(def co-pilot "Chewbacca")
+(def uglglg "UGGLLGLGLGLGLGLL!")
+
+(println co-pilot " says " uglglg)
+
+;; Maps aka The goat
+
+;; {}
+(def michael
+  {:name "Michael"
+   :surname "Zavarella"
+   :height 81
+   :weight 285
+   :job "linebacker"
+   :universe "not this fuckin one..."})
+
+(get michael :name) ;; Michael
+(get michael :job) ;; linebacker
+(get michael :universe) ;; not this fuckin one...
+
+(michael :name)
+(michael :job)
+(michael :universe)
+
+(map #(michael %) [:name :job :universe]) ;; returns as list
+
+;; Vectors
+
+;; []
+(def triangle [[0 0] [1 19] [19 1]])
+
+;; Going through stuff you already know is brutal
 
 
 
@@ -88,20 +144,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-(defn -main
+ (defn -main
   "I don't do a whole lot ... yet."
   [& args]
   (println "Hello, World!"))
