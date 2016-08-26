@@ -336,9 +336,41 @@
 
 (sym asym-bits)
 
+;; Time to beat up hobbits
+
+(defn hit
+  [parts]
+  (let [sym-parts (sym parts)
+        part-size-sum (reduce + (map :size sym-parts))
+        target (rand part-size-sum)]
+    (loop [[part & remaining] sym-parts
+           acc-size (:size part)]
+      (if (> acc-size target)
+        part
+        (recur remaining (+ acc-size (:size (first remaining))))))))
+
+;; weighted targeting... I like it
+;; The loop creates target ranges so that larger parts
+;; have a higher chance of being hit
+
+(hit asym-bits)
+
+;; Since this uses an RNG it's not a mathematical function
+
+;; mapset
+
+(defn mapset
+  [f c]
+  (set (map f c)))
+
+(mapset inc [1 1 2 3 3])
+
+;; sets are unordered 
 
 
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Chapter 4 - Core Functions in Depth ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 
