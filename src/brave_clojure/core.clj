@@ -307,12 +307,6 @@
   {:name (s/replace (:name part) #"^left-" "right-")
    :size (:size part)})
 
-(defn better-matching-part
-  "Use destructuring like you should"
-  [{:keys [name size]}]
-  {:name (s/replace p-name #"^left-" "right-")}
-   :size size)
-
 (defn symmetrize-body-parts
   "Expects a seq of maps with :name and :size"
   [asym-parts]
@@ -331,7 +325,16 @@
 ;; and was writing a ton of pseudo-code.
 ;; Took me an hour to fix the damn thing
 
+;; Their symmetrize function sucks
 
+(defn sym
+  [ap]
+  (reduce (fn [fp p]
+            (into fp (set [p (matching-part p)])))
+          []
+          ap))
+
+(sym asym-bits)
 
 
 
