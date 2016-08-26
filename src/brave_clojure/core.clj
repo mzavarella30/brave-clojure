@@ -137,6 +137,102 @@
 
 ;; Going through stuff you already know is brutal
 
+(get triangle 0) ;; [0 0]
+(get triangle 1) ;; [1 19]
+
+(get (get triangle 2) 0) ;; 19
+
+(def square (conj triangle [0 18]))
+
+;; Vectors are linear collections
+
+;; Lists are too. They act just like vectors
+
+;; Lists conj to the front, vectors conj to the back
+
+;; Sets
+
+;; #{}
+
+;; Act just like mathematical sets
+
+;; useful functions are conj, contains?, and get
+
+;; you can also do stuff like so
+
+(:a #{:a :b}) ;; :a
+
+
+
+;; K.I.S.S
+;; That's why we use Clojure
+;; It's better to have 100 functions operate on 1 entity
+;; than have 10 functions operate on 10 entities
+
+
+;; Functions
+
+;; Prefix notation allows for fleixibility
+
+;; Higher order functions allow for even more flexibility
+
+((or fn1 fn2) params) ;; (fn1 paarams) or (fn2 params)
+
+(or + -) ;; returns `+`
+
+((and (= 1 1) +) 1 2 3) ;; 6
+
+;; You can use HOFs to do some really funky shit
+;; Also leads to denser/more concise code
+
+;; Map, Reduce, Apply, Fold, Filter, etc...
+
+(inc 1) ;; 2
+(map inc [1 2 3]) ;; [2 3 4]
+
+;; Map is used to transform every element of a collection
+;; to something else via a function
+
+;; (map function collection)
+
+;; In the above example, we map the vector [1 2 3]
+;; to [2 3 4] via the `inc` function
+
+;; Function, macro, and special forms 
+
+(if boolean
+  then-stuff
+  optional-else-stuff)
+
+(if happy
+  (say "Im happy")
+  (say "Fuck off"))
+
+;; There was an entire subsection for that!?
+
+;; `defn`
+
+(defn function
+  "doc string for the function"
+  [params go here]
+  (str params go here "for the function"))
+
+(doc function) ;; returns the doc string
+
+(defn multiarity
+  ([p] (multiarity p 0))
+  ([p q] (str "mind your" p " and " q)))
+
+;; better than overloading a function
+
+
+(defn using-&
+  [a b c & xs]
+  (do-stuff-with a b c xs))
+
+;; I'm not going to take notes on destructuring
+
+;; The next section just talks about using stuff in functions
 
 
 
@@ -144,7 +240,21 @@
 
 
 
- (defn -main
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(defn -main
   "I don't do a whole lot ... yet."
   [& args]
   (println "Hello, World!"))
