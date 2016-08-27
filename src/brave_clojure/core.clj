@@ -477,7 +477,25 @@
 (some #(> (:c %) 5) food) ;; nil
 (some #(> (:c %) 2) food) ;; true
 
-(defn -main
+;; Sort
+
+(sort [3 2 1]) ;; [1 2 3]
+(sort-by count ["aaa" "nn" "r"]) ;; ["r "nn" "aaa"]
+
+;; it sorts shit
+
+;; concat
+
+(concat [1 2] [3 4]) ;; [1 2 3 4]
+
+;; k
+
+
+
+
+
+
+(defn -main 
   "I don't do a whole lot ... yet."
-  [& args]
+  [& args] 
   (println "Hello, World!"))
