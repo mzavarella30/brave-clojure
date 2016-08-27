@@ -456,10 +456,16 @@
 ;; some kind of collection
 ;; `drop-while` is used for the tail
 ;; You can use the two in conjunction to get the data
-;; in the middle of a collection. i.e.
+;; in the middle of a collection.
+
+;; Use of `take-while` and `drop-while` to get food from
+;; months 2 and 3
 (take-while #(< (:month %) 4)
             (drop-while #(< (:month %) 2) food))
 
+;; You can use `filter` too but that will process 
+;; all of your data. Since ours is filtered we can
+;; use take and drop to process this more efficiently
 
 
 
