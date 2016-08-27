@@ -373,6 +373,38 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+;; Seq
+;; If `first`, `last`, and `rest` work on the thing
+;; its a sequence or `seq`
+
+(defn titleize [t]
+  (str t " for the Brave and True"))
+
+(def titles
+  (map titleize ["Hampers" "Scooters" "VooDoo Medicine Practice"]))
+
+(map prn titles)
+
+;; On to Zombies?
+
+(def h-con [8.1 7.2 6.3 5.4 4.5 2.0 0.4])
+(def c-con [0.1 1.6 3.0 4.2 5.9 6.2 7.0])
+(def zip-data
+  [h c]
+  {:human h
+   :critter c})
+
+(def zipped-data (map zip-data h-con c-con))
+
+(def sum #(reduce + %))
+(def avg #(/ (sum %) (count %)))
+(defn stats [n]
+  (map #(% n) [sum count avg]))
+
+;; when using map on a hashmap
+;; you can leverage the fact that seq
+;; on a hashmap returns a vector of 
+;; key, value pairs
 
 
 
