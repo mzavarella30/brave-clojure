@@ -490,7 +490,53 @@
 
 ;; k
 
+;; Lazy seqs
 
+(def tempdb
+  {0 {:puns true :pulse false :name "frank"}
+   1 {:puns false :pulse true :name "rick"}
+   2 {:puns false :pulse true :name "randy"}
+   3 {:puns true :pulse true :name "bill"}})
+
+(defn vamp-details
+  [ssn]
+  (Thread/sleep 1000)
+  (get tempdb ssn))
+
+(defn vamp?
+  [r]
+  (and (:puns r) (not (:pulse r))
+       r))
+
+(defn id-vamps
+  [ssns]
+  (first (filter vamp?
+                 (map vamp-details ssns))))
+
+(time (vamp-details 0)) ;; returns in 1 second
+
+(def mapped-details (map vamp-details (range 0 1000000)))
+
+
+;; this takes about 32 seconds for the first go
+;; after that it's almost instant
+(time (first mapped-details))
+
+;; if map wasn't lazy, it'd take about 12 days
+;; on the first try
+
+;; laziness allows for infinite seqs
+
+;; repeat is lazy
+(concat (take 8 (repeat "na")) ["Batman!"])
+
+(take 3 (repeatedly (fn [] (rand-int 10))))
+
+(defn even-numbers
+  ([] (even-numbers 0))
+  ([n] (cons n (lazy-seq (even-numbers (+ n 2))))))
+
+(take 10 (even-numbers))
 
 
 
