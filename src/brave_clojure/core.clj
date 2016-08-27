@@ -468,6 +468,14 @@
 ;; use take and drop to process this more efficiently
 
 
+;; You can use `some` to determine whether or
+;; not a collection contains a value that
+;; will test true for a certain filter function
+
+(some even? [1 2 3 4 5]) ;; true
+
+(some #(> (:c %) 5) food) ;; nil
+(some #(> (:c %) 2) food) ;; true
 
 (defn -main
   "I don't do a whole lot ... yet."
