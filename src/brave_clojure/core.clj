@@ -405,6 +405,39 @@
 ;; you can leverage the fact that seq
 ;; on a hashmap returns a vector of 
 ;; key, value pairs
+;; same goes for the other `seq` functions
+
+;; reduce is really useful
+
+(reduce (fn [m [k v]]
+          (if (> v 4)
+            (assoc m k v)
+            m))
+        {}
+        {:human 4.1
+         :critter 3.9}) ;; {:human 4.1}}
+
+;; `reduce` is really bendy
+
+;; take, drop, *-while
+
+(take 3 [1 2 3 4 5 6]) ;; [1 2 3]
+(drop 3 [1 2 3 4 5 6]) ;; [4 5 6]
+
+(def food
+  [{:month 1 :day 1 :h 5 :c 0}
+   {:month 1 :day 2 :h 4 :c 1}
+   {:month 1 :day 3 :h 3 :c 2}
+   {:month 2 :day 1 :h 2 :c 3}
+   {:month 2 :day 2 :h 1 :c 4}
+   {:month 2 :day 3 :h 0 :c 5}])
+
+(take-while #(< (:month %) 2) food)
+(reduce +
+        (map :c 
+             (take-while
+               #(< (:month %) 2)
+               food)))
 
 
 
