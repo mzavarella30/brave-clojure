@@ -432,7 +432,11 @@
    {:month 2 :day 2 :h 1 :c 4}
    {:month 2 :day 3 :h 0 :c 5}])
 
+;; get the first month of eating
 (take-while #(< (:month %) 2) food)
+
+;; see how much critter was eaten 
+;; in the first month
 (reduce +
         (map :c 
              (take-while
