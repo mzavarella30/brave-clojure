@@ -389,7 +389,7 @@
 
 (def h-con [8.1 7.2 6.3 5.4 4.5 2.0 0.4])
 (def c-con [0.1 1.6 3.0 4.2 5.9 6.2 7.0])
-(def zip-data
+(defn zip-data
   [h c]
   {:human h
    :critter c})
@@ -430,10 +430,19 @@
    {:month 1 :day 3 :h 3 :c 2}
    {:month 2 :day 1 :h 2 :c 3}
    {:month 2 :day 2 :h 1 :c 4}
-   {:month 2 :day 3 :h 0 :c 5}])
+   {:month 2 :day 3 :h 0 :c 5}
+   {:month 3 :day 1 :h 5 :c 0}
+   {:month 3 :day 2 :h 4 :c 1}
+   {:month 3 :day 3 :h 3 :c 2}
+   {:month 4 :day 1 :h 2 :c 3}
+   {:month 4 :day 2 :h 1 :c 4}
+   {:month 4 :day 3 :h 0 :c 5}])
 
 ;; get the first month of eating
 (take-while #(< (:month %) 2) food)
+
+;; `drop-while` works in the same way
+;; expect it drops instead of takes
 
 ;; see how much critter was eaten 
 ;; in the first month
@@ -442,6 +451,15 @@
              (take-while
                #(< (:month %) 2)
                food)))
+
+;; `take-while` is used to get data from the head of
+;; some kind of collection
+;; `drop-while` is used for the tail
+;; You can use the two in conjunction to get the data
+;; in the middle of a collection. i.e.
+(take-while #(< (:month %) 4)
+            (drop-while #(< (:month %) 2) food))
+
 
 
 
