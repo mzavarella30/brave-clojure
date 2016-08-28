@@ -1,6 +1,7 @@
 (ns brave-clojure.core
-  (:gen-class)
-  (use [clojure.string :as s]))
+  (require [clojure.string :as s] 
+       [clojure.set :as st])
+  (:gen-class))
 
 
 ;; Chapter 1 and 2 don't involved code
@@ -500,7 +501,7 @@
 
 (defn vamp-details
   [ssn]
-  (Thread/sleep 1000)
+  ;;(Thread/sleep 1000)
   (get tempdb ssn))
 
 (defn vamp?
@@ -607,7 +608,7 @@
   [x] 
   (< 0 x))
 (def positive
-  (compliment negative))
+  (complement negative))
 
 
 ;; vampire thing
@@ -687,6 +688,170 @@
 
 ;; Oh... it's good.
 
+;; The perfect code is written in such a way that
+;; it is immediately understandably to even
+;; the dumbest developer
+
+;; side effects make code harder to understand
+;; thus, they [side effects] bring code further
+;; from perfection.
+
+;; Shit like changing stuff attached to a server
+;; context can wreak havoc on an application.
+
+;; limit the use of side effects
+
+;;;;;;;;;;;;;;;;;;
+;; Immutability ;;
+;;;;;;;;;;;;;;;;;;
+
+;; clojure core data structures are all immutable
+
+;; How to do stuff without changing stuff?
+
+;; Recursion and map/reduce instead of loops
+
+;; Clojure does not allow reassignment
+(def baby-name "Alice")
+
+(let [baby-name "Bloodthunder"]
+  baby-name)
+
+(prn baby-name) ;; its still alice
+
+;; Recursion
+
+(defn sum
+  ([vals] (sum vals 0))
+  ([vals acc-total]
+   (if (empty? vals)
+     acc-total
+     (recur (rest vals) (+ acc-total (first vals))))))
+
+;; Use recur to prevent a stackoverflow 
+;; when the collections get too big
+
+;; This uses arity overloading so that we can call
+;; `sum` on just one integer without having to 
+;; add that `0` param in there
+
+(defn real-sum [xs]
+  (reduce + xs))
+
+
+;; Function Composition
+
+;; better than attribute mutation
+
+;; Typically, OO programs mutate the state until
+;; they achieve the desired result.
+
+;; The better way to do it is to pipe the state
+;; through a transactional function composition 
+
+;; OOP is stupid
+
+;; Things to do with Pure Functions
+
+;; `comp`
+
+((comp inc *) 2 3) ;; 7
+
+(def hero
+  {:name "Naruto"
+   :attr {:str 8
+          :dex 14
+          :int -6}})
+
+(def c-int (comp :int :attr))
+(def c-dex (comp :dex :attr))
+(def c-str (comp :str :attr))
+
+(c-int hero)
+(c-str hero)
+(c-dex hero)
+
+;; comp creates functions
+;; (fn [c] (:int (:attr c)))
+;; etc...
+
+(def spell-slots (comp int inc #(/ % 2) c-int))
+
+
+;; Memoize
+
+;; stores a function call w/ params for instant
+;; return for preceding calls
+
+;; Peg thing
+
+(declare successful-move
+         prompt-move
+         game-over
+         query-rows)
+
+
+(defn tri*
+  "Generates a lazy triangle"
+  ([] (tri* 0 1))
+  ([sum n]
+   (let [new-sum (+ sum n)]
+     (cons new-sum (lazy-seq (tri* new-sum (inc n)))))))
+
+(def tri (tri*))
+
+(defn triangular?
+  "Determines whether or not a number is triangular"
+  [n]
+  (= n (last (take-while #(>= n %) tri))))
+
+(defn row-tri
+  "The triangular number at the end of row n"
+  [n]
+  (last (take n tri)))
+
+(defn row-num
+  "Returns the row num and position"
+  [pos]
+  (int (count (take-wihle #(> pos %) tri))))
+
+(defn connect
+  [board max-pos pos neighbor dest]
+  (if (<= dest max-pos)
+    (reduce (fn [new-board [p1 p2]]
+              (assoc-in new-board [pi :connections p2] neighbor))
+            board
+            [[pos destination] [destination pos]])))
+
+(defn connect-right
+  [board max-pos pos]
+  (let [neighbor (inc pos)
+        dest (inc neighbor)]
+    (if-not (or (triangular? neighbor) (triangular? pos))
+      (connect board max-pos pos neighbor dest)
+      boarde)))
+
+(defn connect-down-left
+  [board max-pos pos]
+  (let [row (row-num pos)
+        neighbor (+ row pos)
+        dest (+ 1 row neighbor)]
+    (connect board max-pos pos neighbor dest)))
+
+(defn connect-down-right
+  [board max-pos pos]
+  (let [row (row-num pos)
+        neighbor (+ 1 row pos)
+        dest (+ 2 row neighbor)]
+    (connect board max-pos pos neighbor dest)))
+
+(defn add-pos
+  [board max-pos pos]
+  (let [pegged-board (assoc-in board [pos :pegged] true)]
+    (reduce (fn [new-board connection-creation-fn]
+              (connection-creation-fn new-board max-pos pos))
+            pegged-board
+            [connect-right connect-down-left connect-down-right])))
 
 
 
@@ -698,14 +863,7 @@
 
 
 
-
-
-
-
-
-
-
-defn -main 
+(defn -main 
   "I don't do a whole lot ... yet."
   [& args] 
   (println "Hello, World!"))
