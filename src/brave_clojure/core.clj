@@ -538,10 +538,145 @@
 
 (take 10 (even-numbers))
 
+;;;;;;;;;;;;;;;;;
+;; Collections ;;
+;;;;;;;;;;;;;;;;;
+
+;; Sequences are good for working on individual pieces
+;; Collections are good for working on the entire thing
+
+;; `count`, `empty?`, and `every?` are key collections
+;; functions. They all have one thing in common and that
+;; is that their scope is the collection as a whole
+(empty? []) ;; true
+(empty? [1]) ;; false
+
+;; `into`
+
+;; Many `seq` functions return a seq rather than
+;; the original data structure. You can use `into`
+;; to make that structure a map again
+
+(map identity {:likes-sunlight false})
+(into {} (map identity {:likes-sunlight false}))
+
+;; You can use `into` for any data structure
+
+;; Putting something `into` a set is a good way
+;; to remove duplicates
+
+(into #{} [1 1 1 2 2 2 3 3 3]) ;; #{1 3 2}
+;; sets are unordered
+
+;; `conj` is the literal friend that just wont
+;; be normal
+
+(conj [0] [1]) ;; [0 [1]]
+(conj [0] [1 2 3]) ;; [0 [1 2 3]]
+
+(conj [0] 1 2 3) ;; [0 1 2 3]
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; Function Functions ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Apply
+;; explodes a seqable structure so it [the structure]
+;; can be passed to a function normally
+
+(max 1 2 3)         ;; 3
+(max [1 2 3])       ;; [1 2 3] O_O
+(apply max [1 2 3]) ;; 3
+
+;; conj can be naturally defined in terms of into
+;; into can be defined using conj along with apply
+
+;; Partial
+
+(def add10 (partial + 10))
+(add10 10) ;; 20
+
+(def add-missing-elements
+  (partial conj ["water" "fire" "earth" "air"]))
+(add-missing-elements "lightning" "unobtainium")
+  ;; I'm not typing that out, you know what happens
+
+;; Complement
+
+(defn negative 
+  [x] 
+  (< 0 x))
+(def positive
+  (compliment negative))
+
+
+;; vampire thing
+
+(def filename "resources/suspects.csv")
+
+(def vamp-keys [:name :glitter-index])
+
+(defn str->int [s]
+  (Integer. s))
+
+(def conversions
+  {:name identity
+   :glitter-index str->int})
+
+(defn csv->vamp
+  [k v]
+  ((get conversions k) v))
+
+(csv->vamp :glitter-index "3")
+
+(defn parse-csv
+  "Parse csv string into rows of cols"
+  [csv]
+  (map #(s/split % #",")
+       (s/split csv #"\n")))
+
+(defn mapify
+  [rows]
+  (map (fn [unmapped-row]
+         (reduce (fn [row-map [k v]]
+                   (assoc row-map k (csv->vamp k v)))
+                 {}
+                 (map vector vamp-keys unmapped-row)))
+       rows))
+
+(def vamp-data
+  (mapify (parse-csv (slurp filename))))
+
+(defn glitter-filter
+  [min records]
+  (filter #(>= (:glitter-index %) min) records))
+
+(glitter-filter 3 vamp-data)
 
 
 
-(defn -main 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+defn -main 
   "I don't do a whole lot ... yet."
   [& args] 
   (println "Hello, World!"))
