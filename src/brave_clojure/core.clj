@@ -653,10 +653,39 @@
 
 (glitter-filter 3 vamp-data)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functional Programming ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Woo!
 
+;; Pure Functions
 
+;; They are easy to reason about
+;; 1 to 1
+;; Referential transparency
 
+;; pure functions depend on immutability
+(defn wisdom
+  [phrase]
+  (str phrase ", Michael-san"))
+
+;; the string ", ... " is immutable and so
+;; this function is stable
+
+;; anything involving randomness is not
+;; rng is not mathematically pure because
+;; the same input will not always return
+;; the same output
+
+;; IO is not referentially transparent
+;; because the input can change
+
+;; pure functions have no side affects
+
+;; Beware. I just got a glass of whiskey
+
+;; Oh... it's good.
 
 
 
