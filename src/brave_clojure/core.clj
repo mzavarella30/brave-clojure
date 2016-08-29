@@ -813,15 +813,15 @@
 (defn row-num
   "Returns the row num and position"
   [pos]
-  (int (count (take-wihle #(> pos %) tri))))
+  (int (count (take-while #(> pos %) tri))))
 
 (defn connect
   [board max-pos pos neighbor dest]
   (if (<= dest max-pos)
     (reduce (fn [new-board [p1 p2]]
-              (assoc-in new-board [pi :connections p2] neighbor))
+              (assoc-in new-board [p1 :connections p2] neighbor))
             board
-            [[pos destination] [destination pos]])))
+            [[pos dest] [dest pos]])))
 
 (defn connect-right
   [board max-pos pos]
@@ -829,7 +829,7 @@
         dest (inc neighbor)]
     (if-not (or (triangular? neighbor) (triangular? pos))
       (connect board max-pos pos neighbor dest)
-      boarde)))
+      board)))
 
 (defn connect-down-left
   [board max-pos pos]
