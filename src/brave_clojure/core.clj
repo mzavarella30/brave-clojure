@@ -854,8 +854,49 @@
             [connect-right connect-down-left connect-down-right])))
 
 
+(defn new-board
+  [rows]
+  (let [initial-board {:rows rows}
+        max-pos (row-tri rows)]
+    (reduce (fn [board pos] (add-pos board max-pos pos))
+            initial-board
+            (range 1 (inc max-pos)))))
+
+(defn pegged?
+  [board pos]
+  (get-in board [pos :pegged]))
+
+;; It's worth the effor to note that assoc-in does not mutate
+;; the board, it returns a new one
+(defn remove-peg
+  [board pos]
+  (assoc-in board [pos :pegged] false))
+
+(defn place-peg
+  [board pos]
+  (assoc-in board [pos :pegged] true))
+
+(defn move-peg
+  [board p1 p2]
+  (place-peg (remove-peg board p1) p2)
 
 
+(defn valid-moves
+  [board pos]
+  (into {}
+        (filter (fn [[destination jumped]]
+                  (and (not (pegged? board destination))
+                       (pegged? board jumped)))
+                (get-in board [pos :connections]))))
+
+(defn valid-move?
+  [board p1 p2]
+  (get (valid-moves board p1) p2))
+
+(defn make-move
+  [board p1 p2]
+  (if-let [jumped (valid-move? board p1 p2)]
+    (move-peg (remove-peg board jumped) p1 p2)))
 
 
 
